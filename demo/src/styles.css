@@ -665,6 +665,11 @@ body {
 
 .footer-name {
   color: rgba(251, 251, 251, 0.7);
+  text-decoration: none;
+}
+
+.footer-name:hover {
+  color: rgba(251, 251, 251, 0.9);
 }
 
 /* ─── Card styles for playground ───────────────────────────── */

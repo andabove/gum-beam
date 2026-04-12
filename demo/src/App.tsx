@@ -202,10 +202,10 @@ export default function App() {
       <main id="main-content" className="app">
         <header className="header">
           <nav aria-label="External links" className="top-bar-links">
-            <a className="icon-btn" href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
+            <a className="icon-btn" href="https://github.com/Jakubantalik/border-beam" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
               <GitHubIcon />
             </a>
-            <a className="icon-btn" href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
+            <a className="icon-btn" href="https://x.com/jakubantalik" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
               <XIcon />
             </a>
           </nav>
@@ -373,7 +373,7 @@ export default function App() {
 
         <footer className="footer">
           <span className="footer-muted">Made by</span>{' '}
-          <span className="footer-name">Jakub Antalik</span>
+          <a className="footer-name" href="https://x.com/jakubantalik" target="_blank" rel="noopener noreferrer">Jakub Antalik</a>
         </footer>
       </main>
     </>
