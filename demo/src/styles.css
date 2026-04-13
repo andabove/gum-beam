@@ -573,6 +573,11 @@ body {
     inset 0 0 0 0.5px rgba(255, 255, 255, 0.02),
     inset 0 0.5px 0 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
+  cursor: grab;
+}
+
+.strength-track:active {
+  cursor: grabbing;
 }
 
 .strength-fill {
@@ -602,6 +607,7 @@ body {
   color: rgba(251, 251, 251, 0.6);
   white-space: nowrap;
   pointer-events: none;
+  z-index: 1;
 }
 
 .strength-input {
@@ -614,8 +620,14 @@ body {
   margin: 0;
   padding: 0;
   background: transparent;
-  cursor: pointer;
+  cursor: grab;
   opacity: 0;
+  touch-action: none;
+  z-index: 2;
+}
+
+.strength-input:active {
+  cursor: grabbing;
 }
 
 .strength-track:hover {
@@ -739,7 +751,7 @@ body {
 
   .example-cell {
     padding: 32px 20px;
-    min-height: 200px;
+    min-height: 120px;
     border-radius: 20px;
   }
 
