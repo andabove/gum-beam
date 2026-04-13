@@ -551,12 +551,6 @@ function getLineBloomGradients(colorVariant: BorderBeamColorVariant, isDark: boo
   const spikeColor2 = spikeColors.secondary;
   const bloomData = lineBloomColors[colorVariant][isDark ? 'dark' : 'light'];
   const spikes = bloomData.spikes;
-  const isMono = colorVariant === 'mono';
-
-  if (isMono) {
-    return getLineBloomGradientsMono(isDark, id);
-  }
-
   if (isDark) {
     const sc1 = spikeColor;
     const sc1_30 = spikeColor;
@@ -583,29 +577,6 @@ function getLineBloomGradients(colorVariant: BorderBeamColorVariant, isDark: boo
        radial-gradient(ellipse calc(1.2px * (2 - var(--beam-spike2-${id}))) calc(85px * var(--beam-h-${id})) at 64% calc(100% - 4px), ${spikes[2].color1}, ${spikes[2].color2} 35%, transparent 89%),
        radial-gradient(ellipse calc(7px * var(--beam-spike-${id})) calc(45px * var(--beam-h-${id})) at 78% calc(100% - 2px), ${spikes[3].color1}, ${spikes[3].color2} 48%, transparent 94%),
        radial-gradient(ellipse calc(1px * (2 - var(--beam-spike-${id}))) calc(60px * var(--beam-h-${id})) at 92% calc(100% - 3px), ${spikes[4].color1}, ${spikes[4].color2} 42%, transparent 91%),
-       radial-gradient(ellipse calc(50px * var(--beam-w-${id})) calc(32px * var(--beam-h-${id})) at calc(var(--beam-x-${id}) * 100%) calc(100%), rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.18) 30%, rgba(0, 0, 0, 0.03) 60%, transparent 85%)`;
-  }
-}
-
-function getLineBloomGradientsMono(isDark: boolean, id: string): string {
-  if (isDark) {
-    return `radial-gradient(ellipse calc(18px * var(--beam-spike-${id})) calc(30px * var(--beam-h-${id})) at 8% calc(100% - 2px), rgba(200, 200, 200, 0.35), rgba(200, 200, 200, 0.12) 50%, transparent 100%),
-       radial-gradient(ellipse calc(14px * var(--beam-spike2-${id})) calc(28px * var(--beam-h-${id})) at 22% calc(100% - 4px), rgba(170, 170, 170, 0.3), rgba(170, 170, 170, 0.1) 50%, transparent 100%),
-       radial-gradient(ellipse calc(16px * var(--beam-spike-${id})) calc(32px * var(--beam-h-${id})) at 36% calc(100% - 3px), rgba(190, 190, 190, 0.35), rgba(190, 190, 190, 0.12) 50%, transparent 100%),
-       radial-gradient(ellipse calc(20px * var(--beam-spike2-${id})) calc(25px * var(--beam-h-${id})) at 50% calc(100% - 2px), rgba(180, 180, 180, 0.25), rgba(180, 180, 180, 0.08) 55%, transparent 100%),
-       radial-gradient(ellipse calc(15px * var(--beam-spike2-${id})) calc(30px * var(--beam-h-${id})) at 64% calc(100% - 4px), rgba(185, 185, 185, 0.32), rgba(185, 185, 185, 0.1) 50%, transparent 100%),
-       radial-gradient(ellipse calc(12px * var(--beam-spike-${id})) calc(28px * var(--beam-h-${id})) at 78% calc(100% - 2px), rgba(175, 175, 175, 0.28), rgba(175, 175, 175, 0.09) 50%, transparent 100%),
-       radial-gradient(ellipse calc(17px * var(--beam-spike-${id})) calc(26px * var(--beam-h-${id})) at 92% calc(100% - 3px), rgba(195, 195, 195, 0.3), rgba(195, 195, 195, 0.1) 50%, transparent 100%),
-       radial-gradient(ellipse calc(21px * var(--beam-spike-${id})) calc(15px * var(--beam-spike2-${id})) at calc(var(--beam-x-${id}) * 100%) calc(100% + 1px), rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 20%, rgba(255, 255, 255, 0.5) 50%, transparent 100%),
-       radial-gradient(ellipse calc(42px * var(--beam-w-${id})) calc(40px * var(--beam-h-${id})) at calc(var(--beam-x-${id}) * 100%) 100%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 25%, rgba(255, 255, 255, 0.03) 55%, transparent 80%)`;
-  } else {
-    return `radial-gradient(ellipse calc(18px * var(--beam-spike-${id})) calc(30px * var(--beam-h-${id})) at 8% calc(100% - 2px), rgba(80, 80, 80, 0.3), rgba(80, 80, 80, 0.1) 50%, transparent 100%),
-       radial-gradient(ellipse calc(14px * var(--beam-spike2-${id})) calc(28px * var(--beam-h-${id})) at 22% calc(100% - 4px), rgba(100, 100, 100, 0.25), rgba(100, 100, 100, 0.08) 50%, transparent 100%),
-       radial-gradient(ellipse calc(16px * var(--beam-spike-${id})) calc(32px * var(--beam-h-${id})) at 36% calc(100% - 3px), rgba(70, 70, 70, 0.3), rgba(70, 70, 70, 0.1) 50%, transparent 100%),
-       radial-gradient(ellipse calc(20px * var(--beam-spike2-${id})) calc(25px * var(--beam-h-${id})) at 50% calc(100% - 2px), rgba(90, 90, 90, 0.22), rgba(90, 90, 90, 0.07) 55%, transparent 100%),
-       radial-gradient(ellipse calc(15px * var(--beam-spike2-${id})) calc(30px * var(--beam-h-${id})) at 64% calc(100% - 4px), rgba(85, 85, 85, 0.28), rgba(85, 85, 85, 0.09) 50%, transparent 100%),
-       radial-gradient(ellipse calc(12px * var(--beam-spike-${id})) calc(28px * var(--beam-h-${id})) at 78% calc(100% - 2px), rgba(95, 95, 95, 0.24), rgba(95, 95, 95, 0.08) 50%, transparent 100%),
-       radial-gradient(ellipse calc(17px * var(--beam-spike-${id})) calc(26px * var(--beam-h-${id})) at 92% calc(100% - 3px), rgba(75, 75, 75, 0.26), rgba(75, 75, 75, 0.08) 50%, transparent 100%),
        radial-gradient(ellipse calc(50px * var(--beam-w-${id})) calc(32px * var(--beam-h-${id})) at calc(var(--beam-x-${id}) * 100%) calc(100%), rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.18) 30%, rgba(0, 0, 0, 0.03) 60%, transparent 85%)`;
   }
 }
