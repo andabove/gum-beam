@@ -694,8 +694,10 @@ body {
 }
 
 .card-sm {
-  width: 160px;
-  border-radius: 20px;
+  width: 80px;
+  height: 36px;
+  padding: 0;
+  border-radius: 36px;
 }
 
 .card-md {
