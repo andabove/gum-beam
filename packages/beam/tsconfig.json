@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "paths": {
+      "@andabove/gum-beam": ["./src/module.ts"],
+      "@andabove/gum-beam/vue": ["./src/vue.ts"]
+    }
+  },
+  "include": ["src", "*.config.ts"]
+}

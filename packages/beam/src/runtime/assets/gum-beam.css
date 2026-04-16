@@ -1,0 +1,507 @@
+/* =========================================================
+   gum-beam — Gemini sparkle border beam
+   All keyframes and @property declarations are global
+   (no per-instance id-scoping needed; each [data-beam]
+   element runs its own animation instance).
+   ========================================================= */
+
+/* ----- Gemini sparkle palette ----- */
+:where([data-beam]) {
+  --gum-s1: #4796e3;
+  --gum-s2: #8b5cf6;
+  --gum-s3: #ec4899;
+  --gum-s1a: rgba(71, 150, 227, 0.48);
+  --gum-s2a: rgba(139, 92, 246, 0.48);
+  --gum-s3a: rgba(236, 72, 153, 0.48);
+}
+
+/* ----- Registered custom properties ----- */
+
+/* sm / md */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: true;
+}
+
+@property --beam-opacity {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
+/* line only */
+@property --beam-x {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: true;
+}
+
+@property --beam-w {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: true;
+}
+
+@property --beam-h {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: true;
+}
+
+@property --beam-spike {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: true;
+}
+
+@property --beam-spike2 {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: true;
+}
+
+@property --beam-edge {
+  syntax: "<number>";
+  initial-value: 1;
+  inherits: true;
+}
+
+/* ----- Base wrapper ----- */
+[data-beam] {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--beam-radius, 16px);
+}
+
+[data-beam][data-size="sm"] {
+  display: inline-flex;
+  align-self: flex-start;
+}
+
+/* ----- sm / md: spin + fade keyframes ----- */
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+@keyframes beam-fade-in {
+  to { --beam-opacity: 1; }
+}
+
+@keyframes beam-fade-out {
+  from { --beam-opacity: 1; }
+  to { --beam-opacity: 0; }
+}
+
+/* ----- sm / md: active animation ----- */
+[data-beam][data-size="sm"][data-active],
+[data-beam][data-size="md"][data-active] {
+  animation:
+    beam-spin var(--beam-duration, 1.96s) linear infinite,
+    beam-fade-in 0.6s ease forwards;
+}
+
+[data-beam][data-size="sm"][data-fading],
+[data-beam][data-size="md"][data-fading] {
+  animation:
+    beam-spin var(--beam-duration, 1.96s) linear infinite,
+    beam-fade-out 0.5s ease forwards;
+}
+
+/* ----- sm / md: ::after — stroke layer ----- */
+[data-beam][data-size="sm"][data-active]::after,
+[data-beam][data-size="sm"][data-fading]::after,
+[data-beam][data-size="md"][data-active]::after,
+[data-beam][data-size="md"][data-fading]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-inner-radius, 15px);
+  padding: var(--beam-border-width, 1px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  background:
+    /* white hot head */
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 54%,
+      rgba(255, 255, 255, 0.1) 57%,
+      rgba(255, 255, 255, 0.3) 60%,
+      rgba(255, 255, 255, 0.6) 63%,
+      rgba(255, 255, 255, 0.75) 66%,
+      rgba(255, 255, 255, 0.6) 69%,
+      rgba(255, 255, 255, 0.3) 72%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 78%, transparent 100%
+    ),
+    /* sparkle color blobs around the border */
+    radial-gradient(ellipse 70px 40px at 33% -7.4%, var(--gum-s3), transparent),
+    radial-gradient(ellipse 60px 35px at 12% -5%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 40px 70px at 2.1% 68.3%, var(--gum-s2), transparent),
+    radial-gradient(ellipse 20px 35px at 2.1% 68.3%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 180px 32px at 74.4% 100%, var(--gum-s2), transparent),
+    radial-gradient(ellipse 85px 26px at 55% 100%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 74px 32px at 93.9% 0%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 26px 42px at 100% 27.1%, var(--gum-s3), transparent),
+    radial-gradient(ellipse 52px 48px at 100% 27.1%, var(--gum-s2), transparent);
+  -webkit-mask:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-in, xor;
+  mask:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: intersect, exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(var(--beam-opacity) * var(--beam-stroke-opacity, 0.48) * var(--beam-strength, 1));
+}
+
+/* ----- sm / md: ::before — inner glow layer ----- */
+[data-beam][data-size="sm"][data-active]::before,
+[data-beam][data-size="sm"][data-fading]::before,
+[data-beam][data-size="md"][data-active]::before,
+[data-beam][data-size="md"][data-fading]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-radius, 16px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  background:
+    radial-gradient(ellipse 63px 36px at 33% -7.4%, var(--gum-s3a), transparent),
+    radial-gradient(ellipse 54px 32px at 12% -5%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 36px 63px at 2.1% 68.3%, var(--gum-s2a), transparent),
+    radial-gradient(ellipse 18px 32px at 2.1% 68.3%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 162px 29px at 74.4% 100%, var(--gum-s2a), transparent),
+    radial-gradient(ellipse 77px 23px at 55% 100%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 67px 29px at 93.9% 0%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 23px 38px at 100% 27.1%, var(--gum-s3a), transparent),
+    radial-gradient(ellipse 47px 43px at 100% 27.1%, var(--gum-s2a), transparent);
+  box-shadow: inset 0 0 9px 1px var(--beam-inner-shadow, rgba(255, 255, 255, 0.27));
+  -webkit-mask-image:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  -webkit-mask-composite: source-in, source-over;
+  mask-image:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 30%,
+      rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0.35) 44%,
+      white 52%, white 80%,
+      rgba(255, 255, 255, 0.35) 86%, rgba(255, 255, 255, 0.1) 92%,
+      transparent 95%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  mask-composite: intersect, add;
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(var(--beam-opacity) * var(--beam-inner-opacity, 0.7) * var(--beam-strength, 1));
+}
+
+/* ----- sm / md: bloom layer ----- */
+[data-beam][data-size="sm"] [data-beam-bloom],
+[data-beam][data-size="md"] [data-beam-bloom] {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-inner-radius, 15px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  background:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 58%,
+      rgba(255, 255, 255, 0.03) 62%,
+      rgba(255, 255, 255, 0.08) 65%,
+      rgba(255, 255, 255, 0.2) 67%,
+      rgba(255, 255, 255, 0.45) 69%,
+      rgba(255, 255, 255, 0.85) 70%,
+      rgba(255, 255, 255, 0.85) 70.5%,
+      rgba(255, 255, 255, 0.45) 71.5%,
+      rgba(255, 255, 255, 0.2) 73%,
+      rgba(255, 255, 255, 0.08) 75%,
+      rgba(255, 255, 255, 0.03) 78%,
+      transparent 82%
+    );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: var(--beam-border-width, 1px);
+  filter: blur(8px) brightness(1.3) saturate(1.2);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+}
+
+[data-beam][data-size="sm"][data-active] [data-beam-bloom],
+[data-beam][data-size="sm"][data-fading] [data-beam-bloom],
+[data-beam][data-size="md"][data-active] [data-beam-bloom],
+[data-beam][data-size="md"][data-fading] [data-beam-bloom] {
+  display: block;
+  opacity: calc(var(--beam-opacity) * var(--beam-bloom-opacity, 0.8) * var(--beam-strength, 1));
+}
+
+/* =====================================================
+   sm variant — wider mask to show more of the beam
+   (overrides the md mask on ::after and ::before)
+   ===================================================== */
+[data-beam][data-size="sm"][data-active]::after,
+[data-beam][data-size="sm"][data-fading]::after {
+  -webkit-mask:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 22%,
+      rgba(255, 255, 255, 0.12) 28%, rgba(255, 255, 255, 0.4) 36%,
+      white 46%, white 82%,
+      rgba(255, 255, 255, 0.4) 88%, rgba(255, 255, 255, 0.12) 94%,
+      transparent 97%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-in, xor;
+  mask:
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 0%, transparent 22%,
+      rgba(255, 255, 255, 0.12) 28%, rgba(255, 255, 255, 0.4) 36%,
+      white 46%, white 82%,
+      rgba(255, 255, 255, 0.4) 88%, rgba(255, 255, 255, 0.12) 94%,
+      transparent 97%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: intersect, exclude;
+}
+
+[data-beam][data-size="sm"][data-active]::before,
+[data-beam][data-size="sm"][data-fading]::before {
+  box-shadow: inset 0 0 5px 1px var(--beam-inner-shadow, rgba(255, 255, 255, 0.3));
+}
+
+/* =====================================================
+   line variant
+   ===================================================== */
+@keyframes beam-travel {
+  0%   { --beam-x: 0.06; --beam-w: 0.5; }
+  10%  { --beam-x: 0.15; --beam-w: 0.8; }
+  20%  { --beam-x: 0.25; --beam-w: 1.1; }
+  30%  { --beam-x: 0.35; --beam-w: 1.3; }
+  40%  { --beam-x: 0.44; --beam-w: 1.45; }
+  50%  { --beam-x: 0.5;  --beam-w: 1.5; }
+  60%  { --beam-x: 0.56; --beam-w: 1.45; }
+  70%  { --beam-x: 0.65; --beam-w: 1.3; }
+  80%  { --beam-x: 0.75; --beam-w: 1.1; }
+  90%  { --beam-x: 0.85; --beam-w: 0.8; }
+  100% { --beam-x: 0.94; --beam-w: 0.5; }
+}
+
+@keyframes beam-edge-fade {
+  0%    { --beam-edge: 0; }
+  12.5% { --beam-edge: 0; }
+  32.5% { --beam-edge: 1; }
+  67.5% { --beam-edge: 1; }
+  87.5% { --beam-edge: 0; }
+  100%  { --beam-edge: 0; }
+}
+
+@keyframes beam-breathe {
+  0%, 100% { --beam-h: 0.8; }
+  25%       { --beam-h: 1.25; }
+  55%       { --beam-h: 0.85; }
+  80%       { --beam-h: 1.3; }
+}
+
+@keyframes beam-spike {
+  0%   { --beam-spike: 0.8; }
+  25%  { --beam-spike: 1.3; }
+  50%  { --beam-spike: 0.9; }
+  75%  { --beam-spike: 1.4; }
+  100% { --beam-spike: 0.8; }
+}
+
+@keyframes beam-spike2 {
+  0%   { --beam-spike2: 1.2; }
+  25%  { --beam-spike2: 0.7; }
+  50%  { --beam-spike2: 1.4; }
+  75%  { --beam-spike2: 0.8; }
+  100% { --beam-spike2: 1.2; }
+}
+
+[data-beam][data-size="line"][data-active] {
+  animation:
+    beam-travel var(--beam-duration, 2.4s) linear infinite,
+    beam-edge-fade var(--beam-duration, 2.4s) linear infinite,
+    beam-breathe calc(var(--beam-duration, 2.4s) * 1.3) ease-in-out infinite,
+    beam-spike calc(var(--beam-duration, 2.4s) * 1.33) ease-in-out infinite,
+    beam-spike2 calc(var(--beam-duration, 2.4s) * 1.7) ease-in-out infinite,
+    beam-fade-in 0.6s ease forwards;
+}
+
+[data-beam][data-size="line"][data-fading] {
+  animation:
+    beam-travel var(--beam-duration, 2.4s) linear infinite,
+    beam-edge-fade var(--beam-duration, 2.4s) linear infinite,
+    beam-breathe calc(var(--beam-duration, 2.4s) * 1.3) ease-in-out infinite,
+    beam-spike calc(var(--beam-duration, 2.4s) * 1.33) ease-in-out infinite,
+    beam-spike2 calc(var(--beam-duration, 2.4s) * 1.7) ease-in-out infinite,
+    beam-fade-out 0.5s ease forwards;
+}
+
+/* line ::after — stroke layer */
+[data-beam][data-size="line"][data-active]::after,
+[data-beam][data-size="line"][data-fading]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-inner-radius, 15px);
+  padding: var(--beam-border-width, 1px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  background:
+    /* white hot head */
+    radial-gradient(
+      ellipse calc(24px * var(--beam-w)) calc(28px * var(--beam-h))
+        at calc(var(--beam-x) * 100%) calc(100% + 2px),
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.12) 30%,
+      transparent 65%
+    ),
+    /* sparkle blobs travelling with the beam */
+    radial-gradient(ellipse calc(36px * var(--beam-w)) calc(36px * var(--beam-h))   at calc(var(--beam-x) * 100%)           calc(100% + 2px), var(--gum-s3),  transparent),
+    radial-gradient(ellipse calc(30px * var(--beam-w)) calc(32px * var(--beam-h))   at calc(var(--beam-x) * 100% + 39px)    calc(100%),       var(--gum-s1),  transparent),
+    radial-gradient(ellipse calc(33px * var(--beam-w)) calc(28px * var(--beam-h))   at calc(var(--beam-x) * 100% - 36px)    calc(100% + 2px), var(--gum-s2),  transparent),
+    radial-gradient(ellipse calc(29px * var(--beam-w)) calc(34px * var(--beam-h))   at calc(var(--beam-x) * 100% - 54px)    calc(100%),       var(--gum-s2),  transparent),
+    radial-gradient(ellipse calc(27px * var(--beam-w)) calc(30px * var(--beam-h))   at calc(var(--beam-x) * 100% + 51px)    calc(100% - 1px), var(--gum-s1),  transparent),
+    radial-gradient(ellipse calc(36px * var(--beam-w)) calc(24px * var(--beam-h))   at calc(var(--beam-x) * 100% + 21px)    calc(100% + 1px), var(--gum-s2),  transparent),
+    radial-gradient(ellipse calc(30px * var(--beam-w)) calc(22px * var(--beam-h))   at calc(var(--beam-x) * 100% - 21px)    calc(100%),       var(--gum-s1),  transparent),
+    radial-gradient(ellipse calc(25px * var(--beam-w)) calc(28px * var(--beam-h))   at calc(var(--beam-x) * 100% + 66px)    calc(100% + 1px), var(--gum-s3),  transparent),
+    radial-gradient(ellipse calc(23px * var(--beam-w)) calc(30px * var(--beam-h))   at calc(var(--beam-x) * 100% - 66px)    calc(100% - 1px), var(--gum-s2),  transparent);
+  -webkit-mask:
+    radial-gradient(
+      ellipse calc(78px * var(--beam-w)) calc(60px * var(--beam-h))
+        at calc(var(--beam-x) * 100%) 100%,
+      white 0%, rgba(255, 255, 255, 0.5) 45%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: source-in, xor;
+  mask:
+    radial-gradient(
+      ellipse calc(78px * var(--beam-w)) calc(60px * var(--beam-h))
+        at calc(var(--beam-x) * 100%) 100%,
+      white 0%, rgba(255, 255, 255, 0.5) 45%, transparent 100%
+    ),
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: intersect, exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: calc(var(--beam-opacity) * var(--beam-edge) * var(--beam-stroke-opacity, 0.72) * var(--beam-strength, 1));
+}
+
+/* line ::before — inner glow layer */
+[data-beam][data-size="line"][data-active]::before,
+[data-beam][data-size="line"][data-fading]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-radius, 16px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  background:
+    radial-gradient(ellipse calc(33px * var(--beam-w)) calc(30px * var(--beam-h))  at calc(var(--beam-x) * 100%)           calc(100%),       var(--gum-s3a), transparent),
+    radial-gradient(ellipse calc(24px * var(--beam-w)) calc(26px * var(--beam-h))  at calc(var(--beam-x) * 100% + 39px)    calc(100% - 3px), var(--gum-s1a), transparent),
+    radial-gradient(ellipse calc(27px * var(--beam-w)) calc(24px * var(--beam-h))  at calc(var(--beam-x) * 100% - 36px)    calc(100%),       var(--gum-s2a), transparent),
+    radial-gradient(ellipse calc(23px * var(--beam-w)) calc(28px * var(--beam-h))  at calc(var(--beam-x) * 100% - 54px)    calc(100% - 2px), var(--gum-s2a), transparent),
+    radial-gradient(ellipse calc(24px * var(--beam-w)) calc(24px * var(--beam-h))  at calc(var(--beam-x) * 100% + 51px)    calc(100% - 1px), var(--gum-s1a), transparent),
+    radial-gradient(ellipse calc(30px * var(--beam-w)) calc(20px * var(--beam-h))  at calc(var(--beam-x) * 100% + 21px)    calc(100%),       var(--gum-s2a), transparent),
+    radial-gradient(ellipse calc(25px * var(--beam-w)) calc(18px * var(--beam-h))  at calc(var(--beam-x) * 100% - 21px)    calc(100% - 2px), var(--gum-s1a), transparent),
+    radial-gradient(ellipse calc(21px * var(--beam-w)) calc(24px * var(--beam-h))  at calc(var(--beam-x) * 100% + 66px)    calc(100%),       var(--gum-s3a), transparent),
+    radial-gradient(ellipse calc(18px * var(--beam-w)) calc(26px * var(--beam-h))  at calc(var(--beam-x) * 100% - 66px)    calc(100% - 1px), var(--gum-s2a), transparent);
+  box-shadow: inset 0 0 9px 1px var(--beam-inner-shadow, rgba(255, 255, 255, 0.1));
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse calc(78px * var(--beam-w)) calc(60px * var(--beam-h))
+        at calc(var(--beam-x) * 100%) 100%,
+      white 0%, rgba(255, 255, 255, 0.5) 45%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  -webkit-mask-composite: source-in, source-over;
+  mask-image:
+    radial-gradient(
+      ellipse calc(78px * var(--beam-w)) calc(60px * var(--beam-h))
+        at calc(var(--beam-x) * 100%) 100%,
+      white 0%, rgba(255, 255, 255, 0.5) 45%, transparent 100%
+    ),
+    linear-gradient(white, transparent 28px, transparent calc(100% - 28px), white),
+    linear-gradient(to right, white, transparent 28px, transparent calc(100% - 28px), white);
+  mask-composite: intersect, add;
+  pointer-events: none;
+  z-index: 1;
+  opacity: calc(var(--beam-opacity) * var(--beam-edge) * var(--beam-inner-opacity, 0.7) * var(--beam-strength, 1));
+}
+
+/* line bloom layer */
+[data-beam][data-size="line"] [data-beam-bloom] {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: var(--beam-inner-radius, 15px);
+  clip-path: inset(0 round var(--beam-radius, 16px));
+  padding: 0;
+  -webkit-mask: radial-gradient(
+    ellipse calc(84px * var(--beam-w)) calc(110px * var(--beam-h))
+      at calc(var(--beam-x) * 100%) 100%,
+    white 0%, rgba(255, 255, 255, 0.5) 35%, transparent 100%
+  );
+  -webkit-mask-composite: source-over;
+  mask: radial-gradient(
+    ellipse calc(84px * var(--beam-w)) calc(110px * var(--beam-h))
+      at calc(var(--beam-x) * 100%) 100%,
+    white 0%, rgba(255, 255, 255, 0.5) 35%, transparent 100%
+  );
+  mask-composite: add;
+  background:
+    /* main travelling glow */
+    radial-gradient(ellipse calc(21px * var(--beam-spike)) calc(15px * var(--beam-spike2)) at calc(var(--beam-x) * 100%)           calc(100% + 1px), var(--gum-s2),                    0%, rgba(139, 92, 246, 0.4) 20%, rgba(139, 92, 246, 0.2) 50%, transparent 100%),
+    radial-gradient(ellipse calc(42px * var(--beam-w))     calc(40px * var(--beam-h))     at calc(var(--beam-x) * 100%)           100%,             rgba(139, 92, 246, 0.35)           0%, rgba(139, 92, 246, 0.15) 25%, rgba(139, 92, 246, 0.05) 55%, transparent 80%),
+    /* spike accents */
+    radial-gradient(ellipse calc(9px * var(--beam-spike))  calc(34px * var(--beam-h))     at calc(var(--beam-x) * 100% - 15px)    calc(100% - 2px), var(--gum-s1),                    var(--gum-s1a) 30%, transparent 88%),
+    radial-gradient(ellipse calc(12px * var(--beam-spike)) calc(30px * var(--beam-h))     at calc(var(--beam-x) * 100% + 36px)    calc(100% - 4px), var(--gum-s3),                    rgba(236, 72, 153, 0.4) 40%, transparent 90%),
+    radial-gradient(ellipse calc(7px * var(--beam-spike))  calc(38px * var(--beam-h))     at calc(var(--beam-x) * 100% - 51px)    calc(100% - 2px), var(--gum-s2),                    rgba(139, 92, 246, 0.55) 48%, transparent 94%),
+    radial-gradient(ellipse calc(10px * var(--beam-spike)) calc(28px * var(--beam-h))     at calc(var(--beam-x) * 100% + 21px)    calc(100% - 4px), var(--gum-s1),                    rgba(71, 150, 227, 0.45) 35%, transparent 89%),
+    radial-gradient(ellipse calc(6px * var(--beam-spike))  calc(42px * var(--beam-h))     at calc(var(--beam-x) * 100% - 66px)    calc(100% - 2px), var(--gum-s3),                    rgba(236, 72, 153, 0.35) 42%, transparent 91%);
+  filter: blur(8px) brightness(1.3) saturate(1.2);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+}
+
+[data-beam][data-size="line"][data-active] [data-beam-bloom],
+[data-beam][data-size="line"][data-fading] [data-beam-bloom] {
+  display: block;
+  opacity: calc(var(--beam-opacity) * var(--beam-edge) * var(--beam-bloom-opacity, 0.8) * var(--beam-strength, 1));
+}

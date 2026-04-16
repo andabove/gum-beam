@@ -1,0 +1,54 @@
+{
+  "name": "@andabove/gum-beam",
+  "version": "0.1.0",
+  "description": "Gemini-style animated border beam for Vue 3 and Nuxt",
+  "type": "module",
+  "main": "./dist/module.mjs",
+  "module": "./dist/module.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/module.mjs",
+      "types": "./dist/module.d.mts"
+    },
+    "./vue": "./dist/runtime/components/GumBeam.vue"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "nuxt-module-build build --stub",
+    "build": "nuxt-module-build build",
+    "prepare": "nuxt-module-build build --stub",
+    "typecheck": "vue-tsc --noEmit",
+    "fix": "oxlint src"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.0.0"
+  },
+  "peerDependencies": {
+    "vue": ">=3.4.0"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "latest",
+    "@nuxt/schema": "latest",
+    "nuxt": "latest",
+    "typescript": "^5.8.3",
+    "vue": "latest",
+    "vue-tsc": "latest",
+    "oxlint": "latest"
+  },
+  "keywords": [
+    "vue",
+    "nuxt",
+    "animation",
+    "gemini",
+    "border",
+    "beam",
+    "glow",
+    "effect",
+    "css"
+  ],
+  "author": "andabove",
+  "license": "MIT"
+}

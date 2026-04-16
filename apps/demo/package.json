@@ -1,0 +1,17 @@
+{
+  "name": "demo",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "typecheck": "nuxt typecheck",
+    "fix": "oxlint ."
+  },
+  "dependencies": {
+    "@andabove/gum-beam": "workspace:*"
+  },
+  "devDependencies": {
+    "nuxt": "latest",
+    "oxlint": "latest"
+  }
+}
