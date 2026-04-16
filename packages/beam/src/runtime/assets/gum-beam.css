@@ -120,7 +120,7 @@
   padding: var(--beam-border-width, 1px);
   clip-path: inset(0 round var(--beam-radius, 16px));
   background:
-    /* white hot head */
+    /* white hot head — sharp leading edge, diffusing tail */
     conic-gradient(
       from var(--beam-angle),
       transparent 0%, transparent 54%,
@@ -133,16 +133,17 @@
       rgba(255, 255, 255, 0.1) 75%,
       transparent 78%, transparent 100%
     ),
-    /* sparkle color blobs around the border */
-    radial-gradient(ellipse 70px 40px at 33% -7.4%, var(--gum-s3), transparent),
-    radial-gradient(ellipse 60px 35px at 12% -5%, var(--gum-s1), transparent),
-    radial-gradient(ellipse 40px 70px at 2.1% 68.3%, var(--gum-s2), transparent),
-    radial-gradient(ellipse 20px 35px at 2.1% 68.3%, var(--gum-s1), transparent),
-    radial-gradient(ellipse 180px 32px at 74.4% 100%, var(--gum-s2), transparent),
-    radial-gradient(ellipse 85px 26px at 55% 100%, var(--gum-s1), transparent),
-    radial-gradient(ellipse 74px 32px at 93.9% 0%, var(--gum-s1), transparent),
-    radial-gradient(ellipse 26px 42px at 100% 27.1%, var(--gum-s3), transparent),
-    radial-gradient(ellipse 52px 48px at 100% 27.1%, var(--gum-s2), transparent);
+    /* sparkle color blobs — clockwise full perimeter, no dead zones */
+    radial-gradient(ellipse 55px 32px at 10%  -5%,  var(--gum-s1), transparent),
+    radial-gradient(ellipse 75px 28px at 42%  -5%,  var(--gum-s2), transparent),
+    radial-gradient(ellipse 65px 30px at 85%  -5%,  var(--gum-s3), transparent),
+    radial-gradient(ellipse 30px 50px at 100%  22%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 25px 45px at 100%  62%, var(--gum-s2), transparent),
+    radial-gradient(ellipse 120px 26px at 82% 100%, var(--gum-s3), transparent),
+    radial-gradient(ellipse 70px  24px at 50% 100%, var(--gum-s1), transparent),
+    radial-gradient(ellipse 90px  24px at 16% 100%, var(--gum-s2), transparent),
+    radial-gradient(ellipse 28px  55px at 0%   62%, var(--gum-s3), transparent),
+    radial-gradient(ellipse 26px  44px at 0%   25%, var(--gum-s1), transparent);
   -webkit-mask:
     conic-gradient(
       from var(--beam-angle),
@@ -183,15 +184,16 @@
   border-radius: var(--beam-radius, 16px);
   clip-path: inset(0 round var(--beam-radius, 16px));
   background:
-    radial-gradient(ellipse 63px 36px at 33% -7.4%, var(--gum-s3a), transparent),
-    radial-gradient(ellipse 54px 32px at 12% -5%, var(--gum-s1a), transparent),
-    radial-gradient(ellipse 36px 63px at 2.1% 68.3%, var(--gum-s2a), transparent),
-    radial-gradient(ellipse 18px 32px at 2.1% 68.3%, var(--gum-s1a), transparent),
-    radial-gradient(ellipse 162px 29px at 74.4% 100%, var(--gum-s2a), transparent),
-    radial-gradient(ellipse 77px 23px at 55% 100%, var(--gum-s1a), transparent),
-    radial-gradient(ellipse 67px 29px at 93.9% 0%, var(--gum-s1a), transparent),
-    radial-gradient(ellipse 23px 38px at 100% 27.1%, var(--gum-s3a), transparent),
-    radial-gradient(ellipse 47px 43px at 100% 27.1%, var(--gum-s2a), transparent);
+    radial-gradient(ellipse 50px 29px  at 10%  -5%,  var(--gum-s1a), transparent),
+    radial-gradient(ellipse 68px 25px  at 42%  -5%,  var(--gum-s2a), transparent),
+    radial-gradient(ellipse 58px 27px  at 85%  -5%,  var(--gum-s3a), transparent),
+    radial-gradient(ellipse 27px 45px  at 100%  22%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 22px 40px  at 100%  62%, var(--gum-s2a), transparent),
+    radial-gradient(ellipse 108px 23px at 82%  100%, var(--gum-s3a), transparent),
+    radial-gradient(ellipse 63px  22px at 50%  100%, var(--gum-s1a), transparent),
+    radial-gradient(ellipse 81px  22px at 16%  100%, var(--gum-s2a), transparent),
+    radial-gradient(ellipse 25px  50px at 0%    62%, var(--gum-s3a), transparent),
+    radial-gradient(ellipse 23px  40px at 0%    25%, var(--gum-s1a), transparent);
   box-shadow: inset 0 0 9px 1px var(--beam-inner-shadow, rgba(255, 255, 255, 0.27));
   -webkit-mask-image:
     conic-gradient(
@@ -230,22 +232,21 @@
   inset: 0;
   border-radius: var(--beam-inner-radius, 15px);
   clip-path: inset(0 round var(--beam-radius, 16px));
-  background:
-    conic-gradient(
-      from var(--beam-angle),
-      transparent 0%, transparent 58%,
-      rgba(255, 255, 255, 0.03) 62%,
-      rgba(255, 255, 255, 0.08) 65%,
-      rgba(255, 255, 255, 0.2) 67%,
-      rgba(255, 255, 255, 0.45) 69%,
-      rgba(255, 255, 255, 0.85) 70%,
-      rgba(255, 255, 255, 0.85) 70.5%,
-      rgba(255, 255, 255, 0.45) 71.5%,
-      rgba(255, 255, 255, 0.2) 73%,
-      rgba(255, 255, 255, 0.08) 75%,
-      rgba(255, 255, 255, 0.03) 78%,
-      transparent 82%
-    );
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%, transparent 58%,
+    rgba(255, 255, 255, 0.03) 62%,
+    rgba(255, 255, 255, 0.08) 65%,
+    rgba(255, 255, 255, 0.2) 67%,
+    rgba(255, 255, 255, 0.45) 69%,
+    rgba(255, 255, 255, 0.85) 70%,
+    rgba(255, 255, 255, 0.85) 70.5%,
+    rgba(255, 255, 255, 0.45) 71.5%,
+    rgba(255, 255, 255, 0.2) 73%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.03) 78%,
+    transparent 82%
+  );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
