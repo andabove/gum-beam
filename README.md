@@ -1,153 +1,140 @@
-# border-beam
+# gum-beam
 
-Animated border beam effect for React. A lightweight component that adds a traveling glow animation around any element — cards, buttons, inputs, or search bars.
+Gemini-style animated border beam for Vue 3 and Nuxt. A lightweight component that wraps any element and renders a traveling sparkle glow animation along its border — styled after the Google Gemini visual design language.
 
 ## Install
 
 ```bash
-npm install border-beam
+pnpm add @andabove/gum-beam
 ```
 
-## Quick start
+## Nuxt (auto-import)
 
-```tsx
-import { BorderBeam } from 'border-beam';
-
-function App() {
-  return (
-    <BorderBeam>
-      <div style={{ padding: 32, borderRadius: 16, background: '#1d1d1d' }}>
-        Your content here
-      </div>
-    </BorderBeam>
-  );
-}
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@andabove/gum-beam'],
+})
 ```
 
-The component wraps your content and overlays the animated beam effect. It auto-detects the `border-radius` of the first child element.
+```vue
+<template>
+  <GumBeam>
+    <div class="card">Your content</div>
+  </GumBeam>
+</template>
+```
+
+## Vue 3
+
+```ts
+import { GumBeam } from '@andabove/gum-beam/vue'
+```
+
+```vue
+<script setup>
+import { GumBeam } from '@andabove/gum-beam/vue'
+</script>
+
+<template>
+  <GumBeam>
+    <div class="card">Your content</div>
+  </GumBeam>
+</template>
+```
 
 ## Sizes
 
-Three built-in size presets control the glow intensity and animation style:
-
-```tsx
-<BorderBeam size="md">  {/* Full border glow (default) */}
+```vue
+<GumBeam size="md">  <!-- Full border glow on cards (default) -->
   <Card />
-</BorderBeam>
+</GumBeam>
 
-<BorderBeam size="sm">  {/* Compact glow for small elements */}
-  <IconButton />
-</BorderBeam>
+<GumBeam size="sm">  <!-- Compact glow for buttons -->
+  <Button />
+</GumBeam>
 
-<BorderBeam size="line">  {/* Bottom-only traveling glow */}
+<GumBeam size="line">  <!-- Traveling bottom-edge glow for inputs -->
   <SearchBar />
-</BorderBeam>
+</GumBeam>
 ```
 
-## Color variants
+## Active / fade control
 
-Four color palettes are available:
+The beam layers fade in and out independently of the wrapped content — perfect for signalling AI processing state:
 
-```tsx
-<BorderBeam colorVariant="colorful" />  {/* Rainbow spectrum (default) */}
-<BorderBeam colorVariant="mono" />      {/* Grayscale */}
-<BorderBeam colorVariant="ocean" />     {/* Blue-purple tones */}
-<BorderBeam colorVariant="sunset" />    {/* Orange-yellow-red tones */}
-```
-
-All variants except `mono` animate through a hue-shift cycle.
-
-## Theme
-
-Adapts beam colors for dark or light backgrounds:
-
-```tsx
-<BorderBeam theme="dark" />   {/* Dark background (default) */}
-<BorderBeam theme="light" />  {/* Light background */}
-<BorderBeam theme="auto" />   {/* Detects system preference */}
+```vue
+<GumBeam :active="isThinking" @activate="onIn" @deactivate="onOut">
+  <input type="text" placeholder="Ask Gemini…" />
+</GumBeam>
 ```
 
 ## Strength
 
-Control the overall intensity of the effect without affecting the wrapped content:
+Scale the overall glow intensity without touching children:
 
-```tsx
-<BorderBeam strength={0.7}>  {/* 70% intensity */}
+```vue
+<GumBeam :strength="0.6">
   <Card />
-</BorderBeam>
+</GumBeam>
 ```
 
-`strength` accepts a value from `0` (invisible) to `1` (full intensity, default).
+`strength` accepts `0` (invisible) to `1` (full, default).
 
-## Play / pause
+## Border radius
 
-Toggle the animation on and off with smooth fade transitions:
+Auto-detected from the first child's computed `borderTopLeftRadius`. Override explicitly:
 
-```tsx
-const [active, setActive] = useState(true);
-
-<BorderBeam active={active} onDeactivate={() => console.log('faded out')}>
-  <Card />
-</BorderBeam>
+```vue
+<GumBeam :border-radius="999">
+  <button class="pill-btn">Pill</button>
+</GumBeam>
 ```
+
+## Duration
+
+Override the animation cycle duration in seconds:
+
+```vue
+<GumBeam :duration="4">
+  <Card />
+</GumBeam>
+```
+
+Defaults: `1.96s` for `sm`/`md`, `2.4s` for `line`.
 
 ## Props
 
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | — | Content to wrap |
+|---|---|---|---|
 | `size` | `'sm' \| 'md' \| 'line'` | `'md'` | Size/type preset |
-| `colorVariant` | `'colorful' \| 'mono' \| 'ocean' \| 'sunset'` | `'colorful'` | Color palette |
-| `theme` | `'dark' \| 'light' \| 'auto'` | `'dark'` | Background adaptation |
-| `strength` | `number` | `1` | Effect opacity (0–1), only affects the beam layers |
-| `duration` | `number` | `1.96` / `2.4` | Animation cycle duration in seconds |
-| `active` | `boolean` | `true` | Whether the animation is playing |
-| `borderRadius` | `number` | auto-detected | Custom border radius in px |
-| `brightness` | `number` | `1.3` | Glow brightness multiplier |
-| `saturation` | `number` | `1.2` | Glow saturation multiplier |
-| `hueRange` | `number` | `30` | Hue rotation range in degrees |
-| `staticColors` | `boolean` | `false` | Disable hue-shift animation |
-| `className` | `string` | — | Additional class on the wrapper |
-| `style` | `CSSProperties` | — | Additional inline styles on the wrapper |
-| `onActivate` | `() => void` | — | Called when fade-in completes |
-| `onDeactivate` | `() => void` | — | Called when fade-out completes |
+| `active` | `boolean` | `true` | Whether the beam is playing |
+| `strength` | `number` | `1` | Effect opacity 0–1 (beam only, not children) |
+| `duration` | `number` | size-dependent | Animation cycle duration in seconds |
+| `borderRadius` | `number` | auto-detected | Border radius in px |
 
-All standard `HTMLDivElement` attributes are also forwarded to the wrapper.
+## Events
+
+| Event | Description |
+|---|---|
+| `@activate` | Fires when the fade-in animation completes |
+| `@deactivate` | Fires when the fade-out animation completes |
 
 ## How it works
 
-`BorderBeam` renders a wrapper `<div>` with:
+`<GumBeam>` renders a single wrapper `<div>` with:
 
-- **`::after`** — the beam stroke (conic gradient masked to the border)
-- **`::before`** — inner glow layer
-- **`[data-beam-bloom]`** — outer bloom/glow child div
+- `::after` — the spinning border beam (conic gradient masked to the border edge)
+- `::before` — inner glow layer
+- `[data-beam-bloom]` — outer bloom child div
 
-All effect layers are absolutely positioned and use `pointer-events: none`, so they never interfere with your content. Animations use CSS `@property` for smooth GPU-accelerated transitions.
+All effect layers are `pointer-events: none` and absolutely positioned — they never interfere with your content.
 
-## Project structure
+Styles are shipped as a static CSS file injected once by the Nuxt module (or imported once from `@andabove/gum-beam/vue`). Per-instance values (radius, duration, opacity weights, strength) are applied as CSS custom properties on the wrapper element. No runtime CSS generation.
 
-```
-border-beam/
-├── src/
-│   ├── index.ts          # Public exports
-│   ├── BorderBeam.tsx     # React component
-│   ├── types.ts           # TypeScript type definitions
-│   └── styles.ts          # CSS generation engine
-├── demo/                  # Vite + React demo site
-├── dist/                  # Built output (ESM + CJS + types)
-├── package.json
-├── LICENSE
-└── README.md
-```
+## Browser support
 
-## Requirements
-
-- React 18+
-- Modern browser with CSS `@property` support (Chrome 85+, Safari 15.4+, Firefox 128+)
-
-## Accessibility
-
-The effect layers are purely decorative and use `pointer-events: none`. They do not affect keyboard navigation or screen readers. The component respects `prefers-reduced-motion` when implemented by the consumer.
+Requires CSS `@property` (Chrome 85+, Safari 15.4+, Firefox 128+).
 
 ## License
 
